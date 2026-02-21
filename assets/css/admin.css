@@ -1,0 +1,274 @@
+﻿.nerkh-admin {
+    direction: rtl;
+    font-family: 'Vazirmatn', 'IRANSansX', Tahoma, sans-serif;
+}
+
+.nerkh-admin * {
+    box-sizing: border-box;
+}
+
+.nerkh-admin-hero {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 18px 20px;
+    border-radius: 18px;
+    background: linear-gradient(130deg, #103b5d, #0f6c70 60%, #18838a);
+    color: #fff;
+    margin: 14px 0 16px;
+}
+
+.nerkh-admin-hero h1 {
+    margin: 0;
+    color: #fff;
+    font-size: 28px;
+    line-height: 1.2;
+}
+
+.nerkh-admin-hero p {
+    margin: 6px 0 0;
+    opacity: 0.9;
+}
+
+.nerkh-live-meta {
+    margin-top: 8px;
+    font-size: 13px;
+}
+
+#nerkh-live-status {
+    opacity: 0.95;
+}
+
+#nerkh-live-status.is-error {
+    color: #ffd7d7;
+}
+
+.nerkh-source-countdown {
+    display: inline-block;
+    min-width: 82px;
+    text-align: center;
+    padding: 3px 8px;
+    border-radius: 999px;
+    background: #eef5fb;
+    color: #16405f;
+    font-weight: 700;
+    font-size: 12px;
+}
+
+.nerkh-btn {
+    border: none;
+    border-radius: 12px;
+    padding: 10px 18px;
+    background: #f8fef9;
+    color: #0a4f5a;
+    font-weight: 700;
+}
+
+.nerkh-cards {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.nerkh-card {
+    background: #fff;
+    border-radius: 14px;
+    padding: 14px;
+    border: 1px solid #d9e7f1;
+    box-shadow: 0 8px 26px rgba(22, 45, 66, 0.06);
+}
+
+.nerkh-card span {
+    display: block;
+    color: #5e7384;
+    font-size: 12px;
+    margin-bottom: 8px;
+}
+
+.nerkh-card strong {
+    color: #12334a;
+    font-size: 20px;
+}
+
+.nerkh-panel {
+    background: #fff;
+    border: 1px solid #dce8f1;
+    border-radius: 14px;
+    padding: 14px;
+    margin-bottom: 16px;
+}
+
+.nerkh-panel h2 {
+    margin-top: 4px;
+    margin-bottom: 14px;
+}
+
+.nerkh-alert {
+    border-radius: 12px;
+    padding: 10px 14px;
+    margin: 10px 0 14px;
+    border: 1px solid transparent;
+}
+
+.nerkh-alert p {
+    margin: 0;
+    font-weight: 700;
+}
+
+.nerkh-alert-success {
+    background: #ecfaf3;
+    border-color: #abdec2;
+    color: #0f5f35;
+}
+
+.nerkh-alert-error {
+    background: #fff1f1;
+    border-color: #f1b3b3;
+    color: #8e1f1f;
+}
+
+.nerkh-error-debug {
+    margin-top: 8px;
+    color: #2c3e50;
+}
+
+.nerkh-error-debug summary {
+    cursor: pointer;
+    font-weight: 700;
+}
+
+.nerkh-error-debug pre {
+    margin: 8px 0 0;
+    padding: 10px;
+    background: #fafcff;
+    border: 1px solid #d6e4f0;
+    border-radius: 8px;
+    max-height: 260px;
+    overflow: auto;
+    direction: ltr;
+    text-align: left;
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+.nerkh-table th {
+    background: #eef5fb;
+    color: #183b57;
+    font-weight: 800;
+}
+
+.nerkh-table td {
+    vertical-align: middle;
+}
+
+.nerkh-mini-btn.button,
+.nerkh-table .button.small {
+    border-radius: 10px;
+}
+
+.nerkh-shortcode-row td {
+    background: #fbfdff;
+}
+
+.nerkh-panel #nerkh-source-search {
+    width: 100%;
+    max-width: 420px;
+    border-radius: 10px;
+}
+
+.nerkh-shortcode-row details {
+    padding: 8px 0;
+}
+
+.nerkh-shortcode-row summary {
+    cursor: pointer;
+    font-weight: 700;
+    color: #16405f;
+}
+
+.nerkh-shortcode-grid {
+    margin-top: 10px;
+    display: grid;
+    gap: 8px;
+}
+
+.nerkh-shortcode-item {
+    display: grid;
+    grid-template-columns: 180px 1fr auto;
+    gap: 8px;
+    align-items: center;
+    background: #fff;
+    border: 1px solid #dbe8f3;
+    border-radius: 10px;
+    padding: 8px;
+}
+
+.nerkh-shortcode-label {
+    font-weight: 700;
+    color: #1d4662;
+}
+
+.nerkh-shortcode-item code {
+    direction: ltr;
+    text-align: left;
+    padding: 6px 8px;
+    background: #f4f8fc;
+    border-radius: 8px;
+}
+
+.nerkh-copy-toast {
+    position: fixed;
+    left: 24px;
+    bottom: 24px;
+    z-index: 100000;
+    background: #0f5f35;
+    color: #fff;
+    border-radius: 10px;
+    padding: 10px 14px;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.18);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(8px);
+    transition: all 0.2s ease;
+}
+
+.nerkh-copy-toast.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.nerkh-admin .form-table th {
+    width: 230px;
+}
+
+body.toplevel_page_exchange-rate #wpbody-content > .notice,
+body.toplevel_page_exchange-rate #wpbody-content > .update-nag,
+body.exchange-rate_page_exchange-rate-sources #wpbody-content > .notice,
+body.exchange-rate_page_exchange-rate-sources #wpbody-content > .update-nag,
+body.exchange-rate_page_exchange-rate-guide #wpbody-content > .notice,
+body.exchange-rate_page_exchange-rate-guide #wpbody-content > .update-nag {
+    display: none;
+}
+
+@media (max-width: 1100px) {
+    .nerkh-cards {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 782px) {
+    .nerkh-admin-hero {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .nerkh-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .nerkh-shortcode-item {
+        grid-template-columns: 1fr;
+    }
+}
