@@ -1540,6 +1540,7 @@ class Exchange_Rate
                                 <option value="ice_api_latest" <?php selected($is_editing ? (string) $editing_source['type'] : '', 'ice_api_latest'); ?>><?php esc_html_e('API نرخ حواله ICE', 'exchange-rate'); ?></option>
                                 <option value="ice_api_history_currency" <?php selected($is_editing ? (string) $editing_source['type'] : '', 'ice_api_history_currency'); ?>><?php esc_html_e('API تاریخچه ارز ICE', 'exchange-rate'); ?></option>
                                 <option value="milli_gold_price_detail" <?php selected($is_editing ? (string) $editing_source['type'] : '', 'milli_gold_price_detail'); ?>><?php esc_html_e('قیمت طلای میلی (18 عیار)', 'exchange-rate'); ?></option>
+                                <option value="navasan_aed_based" <?php selected($is_editing ? (string) $editing_source['type'] : '', 'navasan_aed_based'); ?>><?php esc_html_e('JSON نوسان (aed_based_rates)', 'exchange-rate'); ?></option>
                                 <option value="cbi_tspd" <?php selected($is_editing ? (string) $editing_source['type'] : '', 'cbi_tspd'); ?>><?php esc_html_e('CBI محافظت‌شده (TSPD)', 'exchange-rate'); ?></option>
                                 <option value="html_table" <?php selected($is_editing ? (string) $editing_source['type'] : '', 'html_table'); ?>><?php esc_html_e('خواندن جدول HTML', 'exchange-rate'); ?></option>
                             </select>
@@ -1547,7 +1548,7 @@ class Exchange_Rate
                                 <input type="hidden" name="source_type" value="<?php echo esc_attr((string) $editing_source['type']); ?>" />
                                 <p class="description"><?php esc_html_e('منبع سیستمی: نوع قابل تغییر نیست.', 'exchange-rate'); ?></p>
                             <?php endif; ?>
-                            <p class="description"><?php esc_html_e('براساس سایت مبدا انتخاب کنید: ICE (latest/history)، میلی (price18)، CBI (TSPD محافظت‌شده).', 'exchange-rate'); ?></p>
+                            <p class="description"><?php esc_html_e('براساس سایت مبدا انتخاب کنید: ICE (latest/history)، میلی (price18)، نوسان (aed_based_rates)، CBI (TSPD محافظت‌شده).', 'exchange-rate'); ?></p>
                         </td>
                     </tr>
                     <tr>

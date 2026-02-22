@@ -65,8 +65,8 @@ class Exchange_Rate_API
         if ($proxy_url !== '') {
             array_unshift($candidate_urls, $proxy_url);
         }
-        $max_attempts = $this->is_ice_source($source_url, $source_type) ? 2 : 1;
-        $timeout = ($proxy_url !== '') ? 18 : ($this->is_ice_source($source_url, $source_type) ? 12 : 18);
+        $max_attempts = $this->is_ice_source($source_url, $source_type) ? 2 : ($this->is_navasan_source($source_url, $source_type) ? 3 : 1);
+        $timeout = ($proxy_url !== '') ? 18 : ($this->is_ice_source($source_url, $source_type) ? 12 : ($this->is_navasan_source($source_url, $source_type) ? 20 : 18));
 
         foreach ($candidate_urls as $candidate_url) {
             for ($attempt = 1; $attempt <= $max_attempts; $attempt++) {
@@ -153,7 +153,7 @@ class Exchange_Rate_API
             return $error;
         }
 
-        if ('ice_api_latest' === $source_type || 'ice_api_history_currency' === $source_type || 'milli_gold_price_detail' === $source_type || 'cbi_tspd' === $source_type) {
+        if ('ice_api_latest' === $source_type || 'ice_api_history_currency' === $source_type || 'milli_gold_price_detail' === $source_type || 'cbi_tspd' === $source_type || 'navasan_aed_based' === $source_type) {
             $result = $this->parse_ice_currency_json($body, $request_url, $source_type);
             if (!is_wp_error($result)) {
                 return $this->attach_source_meta($result, $source);
@@ -204,7 +204,7 @@ class Exchange_Rate_API
             return new WP_Error('exchange_rate_empty_body', __('بدنه پاسخ خالی است.', 'exchange-rate'));
         }
 
-        if ('ice_api_latest' === $source_type || 'ice_api_history_currency' === $source_type || 'milli_gold_price_detail' === $source_type || 'cbi_tspd' === $source_type) {
+        if ('ice_api_latest' === $source_type || 'ice_api_history_currency' === $source_type || 'milli_gold_price_detail' === $source_type || 'cbi_tspd' === $source_type || 'navasan_aed_based' === $source_type) {
             $result = $this->parse_ice_currency_json($body, $source_url, $source_type);
             if (!is_wp_error($result)) {
                 return $this->attach_source_meta($result, $source);
@@ -244,6 +244,10 @@ class Exchange_Rate_API
 
         if ('milli_gold_price_detail' === $source_type || isset($data['data']['price18'])) {
             return $this->parse_milli_gold_detail_json($data, $source_url);
+        }
+
+        if ('navasan_aed_based' === $source_type || $this->looks_like_navasan_payload($data)) {
+            return $this->parse_navasan_aed_based_json($data, $source_url);
         }
 
         if (isset($data['results']) && is_array($data['results'])) {
@@ -298,6 +302,68 @@ class Exchange_Rate_API
             'source_url' => esc_url_raw($source_url),
             'source_date' => $source_date,
             'source_date_key' => $source_date_key,
+            'fetched_at' => time(),
+            'rows' => $rows,
+        );
+    }
+
+    private function parse_navasan_aed_based_json($data, $source_url)
+    {
+        if (!is_array($data) || empty($data)) {
+            return new WP_Error('exchange_rate_invalid_json', __('ساختار JSON نوسان معتبر نیست.', 'exchange-rate'));
+        }
+
+        $rows = array();
+        $latest_timestamp = 0;
+
+        foreach ($data as $key => $item) {
+            if (!is_array($item)) {
+                continue;
+            }
+
+            $value = $this->extract_price_value(isset($item['value']) ? $item['value'] : null);
+            if ($value === null || $value <= 0) {
+                continue;
+            }
+
+            $symbol = '';
+            if (is_string($key) && $key !== '') {
+                $parts = explode('_', strtolower($key));
+                $symbol = strtoupper(trim((string) $parts[0]));
+            }
+
+            if (!preg_match('/^[A-Z0-9]{2,8}$/', $symbol)) {
+                $symbol = strtoupper(trim((string) $symbol));
+            }
+
+            $currency_name = is_string($key) ? trim($key) : '';
+            if ($currency_name === '') {
+                $currency_name = $symbol;
+            }
+
+            $row_timestamp = $this->extract_unix_timestamp(isset($item['date']) ? $item['date'] : null);
+            if ($row_timestamp > 0) {
+                $latest_timestamp = max($latest_timestamp, $row_timestamp);
+            }
+
+            $rows[] = array(
+                'currency_code' => $symbol,
+                'currency_name' => $currency_name,
+                'buy' => $value,
+                'sell' => $value,
+            );
+        }
+
+        if (empty($rows)) {
+            return new WP_Error('exchange_rate_no_rows', __('ردیف معتبری در خروجی نوسان پیدا نشد.', 'exchange-rate'));
+        }
+
+        $source_date = $latest_timestamp > 0 ? wp_date('Y-m-d', $latest_timestamp) : wp_date('Y-m-d', time());
+
+        return array(
+            'source_url' => esc_url_raw($source_url),
+            'source_date' => $source_date,
+            'source_date_key' => $this->normalize_date_key($source_date),
             'fetched_at' => time(),
             'rows' => $rows,
         );
@@ -525,6 +591,69 @@ class Exchange_Rate_API
         return (int) $normalized;
     }
 
+    private function extract_price_value($value)
+    {
+        if (is_int($value)) {
+            return $value;
+        }
+
+        if (is_float($value)) {
+            return (int) round($value);
+        }
+
+        $normalized = $this->normalize_digits((string) $value);
+        $normalized = str_replace(array(',', ' '), '', $normalized);
+        if ($normalized === '') {
+            return null;
+        }
+
+        if (is_numeric($normalized)) {
+            return (int) round((float) $normalized);
+        }
+
+        return $this->extract_integer($normalized);
+    }
+
+    private function extract_unix_timestamp($value)
+    {
+        if (is_int($value)) {
+            return $value > 0 ? $value : 0;
+        }
+
+        $normalized = $this->normalize_digits((string) $value);
+        $normalized = preg_replace('/[^\d]/', '', $normalized);
+        if ($normalized === '') {
+            return 0;
+        }
+
+        $timestamp = (int) $normalized;
+        return $timestamp > 0 ? $timestamp : 0;
+    }
+
+    private function looks_like_navasan_payload($data)
+    {
+        if (!is_array($data) || empty($data)) {
+            return false;
+        }
+
+        $checked = 0;
+        $matches = 0;
+        foreach ($data as $item) {
+            if (!is_array($item)) {
+                continue;
+            }
+            $checked++;
+            if (array_key_exists('value', $item) && array_key_exists('date', $item)) {
+                $matches++;
+            }
+            if ($checked >= 5) {
+                break;
+            }
+        }
+
+        return $checked > 0 && $matches >= max(1, (int) ceil($checked / 2));
+    }
+
     private function normalize_digits($text)
     {
         $map = array(
@@ -746,12 +875,22 @@ class Exchange_Rate_API
         return in_array($host, array('api.ice.ir', 'ice.ir'), true);
     }
 
+    private function is_navasan_source($url, $source_type)
+    {
+        if ('navasan_aed_based' === $source_type) {
+            return true;
+        }
+
+        $host = strtolower((string) wp_parse_url((string) $url, PHP_URL_HOST));
+        return in_array($host, array('www.navasan.net', 'navasan.net'), true);
+    }
+
     private function build_candidate_urls($source_url, $source_type)
     {
         $source_url = (string) $source_url;
         $candidates = array($source_url);
 
-        if (!$this->is_ice_source($source_url, $source_type)) {
+        if (!$this->is_ice_source($source_url, $source_type) && !$this->is_navasan_source($source_url, $source_type)) {
             return $candidates;
         }
 
@@ -766,9 +905,18 @@ class Exchange_Rate_API
         $suffix = $query !== '' ? '?' . $query : '';
         $path_no_slash = rtrim($path, '/');
 
-        foreach (array('ice.ir', 'api.ice.ir') as $host) {
-            $candidates[] = $scheme . '://' . $host . $path . $suffix;
-            $candidates[] = $scheme . '://' . $host . $path_no_slash . $suffix;
+        if ($this->is_ice_source($source_url, $source_type)) {
+            foreach (array('ice.ir', 'api.ice.ir') as $host) {
+                $candidates[] = $scheme . '://' . $host . $path . $suffix;
+                $candidates[] = $scheme . '://' . $host . $path_no_slash . $suffix;
+            }
+        }
+
+        if ($this->is_navasan_source($source_url, $source_type)) {
+            foreach (array('www.navasan.net', 'navasan.net') as $host) {
+                $candidates[] = $scheme . '://' . $host . $path . $suffix;
+                $candidates[] = $scheme . '://' . $host . $path_no_slash . $suffix;
+            }
         }
 
         return array_slice(array_values(array_unique(array_filter($candidates))), 0, 4);
