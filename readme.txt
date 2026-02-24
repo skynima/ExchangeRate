@@ -5,7 +5,7 @@ Tags: currency, gold, shortcode, elementor, rtl
 Requires at least: 5.8
 Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 1.3.0
+Stable tag: 1.3.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -71,6 +71,11 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 - این فایل برای توسعه دهنده های جدید نوشته شده و تمام بخش های اصلی افزونه را توضیح می دهد.
 
 == Changelog ==
+
+= 1.3.1 =
+* Scope کامل CSS فرانت با ریشه اختصاصی برای جلوگیری از تداخل با قالب/افزونه ها
+* اصلاح فایل ویجت Section المنتور (مشکل انکودینگ)
+* بهبود پایداری ثبت ویجت ها تا خرابی یک ویجت باعث اختلال کل Elementor نشود
 
 = 1.3.0 =
 * بازطراحی کامل UI/UX در پنل و فرانت (RTL)

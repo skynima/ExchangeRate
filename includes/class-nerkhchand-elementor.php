@@ -30,14 +30,21 @@ class Nerkh_Chand_Elementor
 
     public static function register_widgets($widgets_manager)
     {
-        require_once EXCHANGE_RATE_PLUGIN_DIR . 'includes/elementor/widgets/class-widget-nerkh-table.php';
-        require_once EXCHANGE_RATE_PLUGIN_DIR . 'includes/elementor/widgets/class-widget-nerkh-cards.php';
-        require_once EXCHANGE_RATE_PLUGIN_DIR . 'includes/elementor/widgets/class-widget-nerkh-ticker.php';
-        require_once EXCHANGE_RATE_PLUGIN_DIR . 'includes/elementor/widgets/class-widget-nerkh-section.php';
+        $widget_files = array(
+            EXCHANGE_RATE_PLUGIN_DIR . 'includes/elementor/widgets/class-widget-nerkh-table.php' => 'Nerkh_Chand_Widget_Table',
+            EXCHANGE_RATE_PLUGIN_DIR . 'includes/elementor/widgets/class-widget-nerkh-cards.php' => 'Nerkh_Chand_Widget_Cards',
+            EXCHANGE_RATE_PLUGIN_DIR . 'includes/elementor/widgets/class-widget-nerkh-ticker.php' => 'Nerkh_Chand_Widget_Ticker',
+            EXCHANGE_RATE_PLUGIN_DIR . 'includes/elementor/widgets/class-widget-nerkh-section.php' => 'Nerkh_Chand_Widget_Section',
+        );
 
-        $widgets_manager->register(new \Nerkh_Chand_Widget_Table());
-        $widgets_manager->register(new \Nerkh_Chand_Widget_Cards());
-        $widgets_manager->register(new \Nerkh_Chand_Widget_Ticker());
-        $widgets_manager->register(new \Nerkh_Chand_Widget_Section());
+        foreach ($widget_files as $file => $class_name) {
+            if (is_readable($file)) {
+                require_once $file;
+            }
+
+            if (class_exists($class_name)) {
+                $widgets_manager->register(new $class_name());
+            }
+        }
     }
 }

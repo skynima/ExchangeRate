@@ -13,7 +13,7 @@ class Nerkh_Chand_Widget_Section extends \Elementor\Widget_Base
 
     public function get_title()
     {
-        return 'نرخ چند؟ - بخش خروجی';
+        return 'Nerkh Chand - Section Output';
     }
 
     public function get_icon()
@@ -28,27 +28,58 @@ class Nerkh_Chand_Widget_Section extends \Elementor\Widget_Base
 
     protected function register_controls()
     {
-        $this->start_controls_section('content_section', array('label' => 'تنظیمات'));
+        $this->start_controls_section('content_section', array('label' => 'Settings'));
 
-        $this->add_control('source', array('label' => 'کلید منبع', 'type' => \Elementor\Controls_Manager::TEXT, 'default' => 'ice_havaleh'));
+        $this->add_control('source', array(
+            'label' => 'Source Key',
+            'type' => \Elementor\Controls_Manager::TEXT,
+            'default' => 'ice_havaleh',
+        ));
+
         $this->add_control('section', array(
-            'label' => 'نوع خروجی',
+            'label' => 'Output Type',
             'type' => \Elementor\Controls_Manager::SELECT,
             'default' => 'full',
             'options' => array(
-                'full' => 'کامل',
-                'title' => 'فقط عنوان',
-                'description' => 'فقط توضیحات',
-                'source_meta' => 'نام منبع + تاریخ منبع',
-                'fetch_date' => 'فقط تاریخ واکشی',
-                'table_only' => 'فقط جدول',
+                'full' => 'Full',
+                'title' => 'Title only',
+                'description' => 'Description only',
+                'source_meta' => 'Source name + source date',
+                'fetch_date' => 'Fetch date only',
+                'table_only' => 'Table only',
             ),
         ));
-        $this->add_control('title', array('label' => 'عنوان (اختیاری)', 'type' => \Elementor\Controls_Manager::TEXT, 'default' => ''));
-        $this->add_control('subtitle', array('label' => 'توضیح (اختیاری)', 'type' => \Elementor\Controls_Manager::TEXTAREA, 'default' => ''));
-        $this->add_control('symbols', array('label' => 'فیلتر کد ارز', 'type' => \Elementor\Controls_Manager::TEXT, 'default' => ''));
-        $this->add_control('date', array('label' => 'تاریخ', 'type' => \Elementor\Controls_Manager::TEXT, 'default' => 'latest'));
-        $this->add_control('limit', array('label' => 'تعداد ردیف', 'type' => \Elementor\Controls_Manager::NUMBER, 'default' => 0, 'min' => 0));
+
+        $this->add_control('title', array(
+            'label' => 'Title (optional)',
+            'type' => \Elementor\Controls_Manager::TEXT,
+            'default' => '',
+        ));
+
+        $this->add_control('subtitle', array(
+            'label' => 'Subtitle (optional)',
+            'type' => \Elementor\Controls_Manager::TEXTAREA,
+            'default' => '',
+        ));
+
+        $this->add_control('symbols', array(
+            'label' => 'Symbol filter',
+            'type' => \Elementor\Controls_Manager::TEXT,
+            'default' => '',
+        ));
+
+        $this->add_control('date', array(
+            'label' => 'Date',
+            'type' => \Elementor\Controls_Manager::TEXT,
+            'default' => 'latest',
+        ));
+
+        $this->add_control('limit', array(
+            'label' => 'Row limit',
+            'type' => \Elementor\Controls_Manager::NUMBER,
+            'default' => 0,
+            'min' => 0,
+        ));
 
         $this->end_controls_section();
     }
@@ -56,6 +87,7 @@ class Nerkh_Chand_Widget_Section extends \Elementor\Widget_Base
     protected function render()
     {
         $s = $this->get_settings_for_display();
+
         $shortcode = sprintf(
             '[exchange_rate source="%s" section="%s" title="%s" subtitle="%s" symbols="%s" date="%s" limit="%d"]',
             esc_attr($s['source']),

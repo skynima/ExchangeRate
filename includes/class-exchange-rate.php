@@ -1834,28 +1834,28 @@ class Exchange_Rate
         wp_enqueue_style('exchange-rate-style');
 
         if ($section === 'title') {
-            return '<span class="exchange-rate-title-only">' . esc_html($title) . '</span>';
+            return '<span class="nerkhchand-scope exchange-rate-title-only">' . esc_html($title) . '</span>';
         }
 
         if ($section === 'description') {
-            return '<span class="exchange-rate-description-only">' . esc_html($subtitle) . '</span>';
+            return '<span class="nerkhchand-scope exchange-rate-description-only">' . esc_html($subtitle) . '</span>';
         }
 
         if ($section === 'source_meta') {
             $name_only = !empty($snapshot['source_name']) ? (string) $snapshot['source_name'] : '-';
             $date_only = $source_date_jalali !== '' ? $source_date_jalali : '-';
-            return '<div class="exchange-rate-source-meta-only"><div>' . esc_html($name_only) . '</div><div>' . esc_html($date_only) . '</div></div>';
+            return '<div class="nerkhchand-scope exchange-rate-source-meta-only"><div>' . esc_html($name_only) . '</div><div>' . esc_html($date_only) . '</div></div>';
         }
 
         if ($section === 'fetch_date') {
-            return '<span class="exchange-rate-fetch-date-only">' . esc_html($fetch_date_jalali) . '</span>';
+            return '<span class="nerkhchand-scope exchange-rate-fetch-date-only">' . esc_html($fetch_date_jalali) . '</span>';
         }
 
         if ($section === 'table_only') {
-            return $this->build_table_only_markup($rows, $is_milli_summary, $is_history_view);
+            return '<div class="nerkhchand-scope nerkhchand-table-only">' . $this->build_table_only_markup($rows, $is_milli_summary, $is_history_view) . '</div>';
         }
 
-        $wrapper_class = 'exchange-rate-box exchange-rate-view-' . $view;
+        $wrapper_class = 'nerkhchand-scope exchange-rate-box exchange-rate-view-' . $view;
 
         ob_start();
         ?>
