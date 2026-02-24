@@ -5,7 +5,7 @@ Tags: currency, gold, shortcode, elementor, rtl
 Requires at least: 5.8
 Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 1.3.1
+Stable tag: 1.3.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -71,6 +71,10 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 - این فایل برای توسعه دهنده های جدید نوشته شده و تمام بخش های اصلی افزونه را توضیح می دهد.
 
 == Changelog ==
+
+= 1.3.2 =
+* انتشار فایل CSS فرانت با نام جدید برای خنثی کردن کش های تهاجمی
+* تداوم scope اختصاصی استایل ها برای جلوگیری از تداخل با Elementor و قالب
 
 = 1.3.1 =
 * Scope کامل CSS فرانت با ریشه اختصاصی برای جلوگیری از تداخل با قالب/افزونه ها

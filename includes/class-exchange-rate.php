@@ -96,7 +96,7 @@ class Exchange_Rate
     {
         wp_register_style(
             'exchange-rate-style',
-            EXCHANGE_RATE_PLUGIN_URL . 'assets/css/exchange-rate.css',
+            EXCHANGE_RATE_PLUGIN_URL . 'assets/css/nerkhchand-frontend.css',
             array(),
             EXCHANGE_RATE_VERSION
         );

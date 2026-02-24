@@ -3,7 +3,7 @@
  * Plugin Name: نرخ چند؟
  * Plugin URI:  https://atomsoft.ir/
  * Description: نمایش نرخ ارز و طلا با پنل حرفه‌ای فارسی، منبع‌های چندگانه، و ویجت‌های المنتور.
- * Version:     1.3.1
+ * Version:     1.3.2
  * Author:      علی فیروزی | اتم سافت - OpenAI
  * Author URI:  https://atomsoft.ir/
  * License:     GPL-2.0-or-later
@@ -16,7 +16,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('EXCHANGE_RATE_VERSION', '1.3.1');
+define('EXCHANGE_RATE_VERSION', '1.3.2');
 define('EXCHANGE_RATE_PLUGIN_FILE', __FILE__);
 define('EXCHANGE_RATE_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('EXCHANGE_RATE_PLUGIN_URL', plugin_dir_url(__FILE__));
