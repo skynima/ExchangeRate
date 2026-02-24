@@ -73,6 +73,12 @@
 - نرخ چند؟ - تیکر
 - نرخ چند؟ - بخش خروجی
 
+برای نصب بدون Elementor:
+
+```php
+define('EXCHANGE_RATE_DISABLE_ELEMENTOR', true);
+```
+
 ## مستندات توسعه
 
 - راهنمای کامل توسعه: [`DEVELOPER_GUIDE.md`](DEVELOPER_GUIDE.md)

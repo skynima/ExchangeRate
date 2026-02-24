@@ -477,6 +477,8 @@ class Exchange_Rate_API
                 $hint = '';
                 if (strpos($source_url, 'fxmarketrate.cbi.ir') !== false) {
                     $hint = ' ' . __('(برای CBI آدرس منبع را روی https://fxmarketrate.cbi.ir/ بگذارید و در صورت نیاز هدر خام اضافه کنید.)', 'exchange-rate');
+                } elseif ($this->is_ice_source($source_url, 'ice_api_latest') || $this->is_ice_source($source_url, 'ice_api_history_currency')) {
+                    $hint = ' ' . __('(برای ICE بهتر است از Relay/Proxy استفاده کنید. در wp-config.php می‌توانید EXCHANGE_RATE_ICE_RELAY_URL را تنظیم کنید.)', 'exchange-rate');
                 }
                 return new WP_Error(
                     'exchange_rate_bot_challenge',
